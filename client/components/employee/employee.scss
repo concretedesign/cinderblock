@@ -1,0 +1,7 @@
+@import "bourbon/bourbon";
+@import "neat/neat";
+
+.employee {
+  margin-bottom: 20px;
+  @include outer-container;
+}

@@ -1,0 +1,6 @@
+@import "bourbon/bourbon";
+@import "neat/neat";
+
+.timeline {
+  @include span-columns(10);
+}

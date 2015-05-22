@@ -4,11 +4,13 @@
 
 <body>
   {{> header}}
-
-  {{> hello}}
+  <main>
+    {{> employees}}
+  </main>
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="employees">
+  {{#each employees}}
+    {{> employee}}
+  {{/each}}
 </template>

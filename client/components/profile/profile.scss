@@ -1,0 +1,20 @@
+@import "bourbon/bourbon";
+@import "neat/neat";
+
+.profile {
+  text-align: center;
+  @include span-columns(2);
+
+  h1 {
+    font-size: rem(18);
+  }
+  h2 {
+    font-size: rem(16);
+    color: #A3A3A3;
+  }
+  img {
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid #e1e1e1;
+  }
+}
