@@ -5,6 +5,11 @@ var clientSchema = new SimpleSchema({
     type: String,
     label: "Name",
     max: 150
+  },
+  color: {
+    type: String,
+    label: "Color",
+    max: 7
   }
 });
 
