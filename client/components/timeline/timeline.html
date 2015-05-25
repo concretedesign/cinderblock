@@ -1,8 +1,14 @@
 <template name="timeline">
   <div class="timeline">
-    <h3>timeline</h3>
     {{#each employee_clients}}
-      <p>{{client_id}}</p>
+      <h3>{{clientName client_id}}</h3>
+      <ul>
+        {{#each work}}
+          <li>{{formatWork this}}</li>
+        {{/each}}
+      </ul>
+    {{else}}
+      This employee has nothing to do!
     {{/each}}
   </div>
 </template>
