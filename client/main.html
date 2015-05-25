@@ -6,11 +6,22 @@
   {{> header}}
   <main>
     {{> employees}}
+    <hr />
+    {{> clients}}
+    <hr />
+    {{> employee_new}}
+    {{> client_new}}
   </main>
 </body>
 
 <template name="employees">
   {{#each employees}}
     {{> employee}}
+  {{/each}}
+</template>
+
+<template name="clients">
+  {{#each clients}}
+    {{> client}}
   {{/each}}
 </template>

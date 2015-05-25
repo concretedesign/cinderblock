@@ -1,6 +1,6 @@
-Template.profile.events({
+Template.client.events({
   "click .delete": function (e) {
     e.preventDefault();
-    Employees.remove(this._id);
+    Clients.remove(this._id);
   }
 });
