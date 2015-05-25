@@ -3,21 +3,38 @@
 </head>
 
 <body>
-  {{> header}}
-  <main>
-    {{> employees}}
-    <hr />
-    {{> clients}}
-    <hr />
-    {{> employee_new}}
-    {{> client_new}}
-  </main>
+  <div class="container {{clientPanelState}}">
+    {{> header}}
+    <main>
+      <a href="#" class="client-panel-toggle">♕</a>
+      <div class="client-panel">
+        {{> clients}}
+        <hr />
+        <div class="button-container">
+          <button class="client-new-toggle">Add Client</button>
+        </div>
+        <div class="client-new-container {{clientNewState}}">
+          {{> client_new}}
+        </div>
+      </div>
+      {{> employees}}
+      <hr />
+      <div class="button-container">
+        <button class="employee-new-toggle">Add Employee</button>
+      </div>
+    </main>
+    <div class="employee-new-container {{employeeNewState}}">
+      {{> employee_new}}
+    </div>
+  </div>
 </body>
 
 <template name="employees">
-  {{#each employees}}
-    {{> employee}}
-  {{/each}}
+  <div class="employees">
+    {{#each employees}}
+      {{> employee}}
+    {{/each}}
+  </div>
 </template>
 
 <template name="clients">

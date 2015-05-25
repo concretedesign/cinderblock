@@ -2,4 +2,28 @@
 @import "neat/neat";
 
 .client-new {
+  background-color: #52B3D9;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  max-height: 0;
+  overflow: hidden;
+  width: 100%;
+  @include transition(max-height 400ms cubic-bezier(0.39, 0.02, 0.23, 1.13));
+
+  form {
+    margin: 20px;
+  }
+
+  a.client-new-close {
+    top: -2px;
+    position: absolute;
+    right: 5px;
+    color: #fff;
+    font-size: 28px;
+  }
+}
+
+.client-new-container.open .client-new {
+  max-height: 400px;
 }

@@ -1,3 +1,58 @@
 @import "bourbon/bourbon";
 @import "neat/neat";
 @import "bitters/base";
+
+@import "styles/variables";
+
+body {
+  margin: 0;
+}
+
+.container {
+
+}
+
+main {
+  padding: 20px;
+}
+
+.container.open {
+  margin-left: $client-panel-width;
+
+  .client-panel {
+    left: 0;
+  }
+}
+
+.container, .client-panel {
+  @include transition(margin 400ms ease-in-out);
+}
+
+.client-panel-toggle {
+  position: fixed;
+  top: 0;
+  right: 10px;
+  font-size: 46px;
+}
+
+.client-panel {
+  position: fixed;
+  top: 0;
+  left: -$client-panel-width;
+  padding: 20px;
+  height: 100%;
+  width: $client-panel-width;
+  overflow: auto;
+  background-color: #EBF0EF;
+  @include transition(left 400ms ease-in-out);
+
+  .button-container {
+    position: absolute;
+    bottom: 30px;
+    width: 200px;
+  }
+}
+
+.button-container {
+  text-align: center;
+}

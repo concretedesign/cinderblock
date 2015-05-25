@@ -15,6 +15,13 @@ Template.client_new.events({
 
     // Clear values
     e.target.name.value = '';
+
+    // Close
+    Session.set('clientNewOpen', false);
+  },
+  "click .client-new-close": function (e) {
+    e.preventDefault();
+    Session.set('clientNewOpen', false);
   }
 });
 

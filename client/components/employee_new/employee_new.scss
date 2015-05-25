@@ -1,6 +1,33 @@
 @import "bourbon/bourbon";
 @import "neat/neat";
 
+.employee-new-container {
+  position: relative;
+}
+
 .employee-new {
-  
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  max-height: 0;
+  overflow: hidden;
+  background-color: #3498db;
+  width: 100%;
+  @include transition(max-height 400ms ease-in-out);
+
+  form {
+    margin: 20px auto;
+    max-width: 50%;
+  }
+
+  a.employee-new-close {
+    position: absolute;
+    right: 20px;
+    color: #fff;
+    font-size: 36px;
+  }
+}
+
+.employee-new-container.open .employee-new {
+  max-height: 400px;
 }

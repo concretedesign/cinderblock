@@ -3,6 +3,7 @@
 
 .profile {
   text-align: center;
+  cursor: pointer;
   @include span-columns(2);
 
   h1 {
