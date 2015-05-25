@@ -20,6 +20,7 @@ Template.client_new.events({
 
 
 Template.client_new.onRendered(function () {
+  // See https://bgrins.github.io/spectrum/ for options
   $(".color-picker").spectrum({
     color: "#000",
     showInput: true,

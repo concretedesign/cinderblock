@@ -12,9 +12,8 @@ var employeeClientSchema = new SimpleSchema({
     regEx: SimpleSchema.RegEx.Id
   },
   work: {
-    type: String,
-    label: "Work ID",
-    regEx: SimpleSchema.RegEx.Id
+    type: [String],
+    label: "Work"
   }
 });
 
