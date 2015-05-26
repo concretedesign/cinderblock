@@ -1,6 +1,8 @@
 @import "bourbon/bourbon";
 @import "neat/neat";
 
+@import "../../styles/variables";
+
 .client-new {
   background-color: #52B3D9;
   position: absolute;
@@ -26,4 +28,9 @@
 
 .client-new-container.open .client-new {
   max-height: 400px;
+}
+
+.client-delete {
+  float: right;
+  background-color: $delete-button-color;
 }

@@ -9,6 +9,9 @@
       <label for="picture">Picture URL</label>
       <input id="employee-picture" type="text" name="picture" placeholder="" />
       <input type="submit" value="Save">
+      {{#if employeeId}}
+        <button class="employee-delete">Delete Employee</button>
+      {{/if}}
     </form>
   </div>
 </template>

@@ -3,12 +3,15 @@
     <a href="#" class="client-new-close">✕</a>
     <form>
       <label for="name">Client Name</label>
-      <input type="text" name="name" placeholder="" />
+      <input id="client-name" type="text" name="name" placeholder="" />
       <label for="name">Client Color</label>
-      <input type="text" name="color" class="color-picker" placeholder="" />
+      <input id="client-color" type="text" name="color" class="color-picker" placeholder="" />
       <br />
       <br />
       <input type="submit" value="Save">
+      {{#if clientId}}
+        <button class="client-delete">Delete</button>
+      {{/if}}
     </form>
   </div>
 </template>

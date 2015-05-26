@@ -17,10 +17,18 @@ Template.body.events({
   },
   "click .client-new-toggle": function (e) {
     e.preventDefault();
+    $('#client-name').val('');
+    $('#color').val('');
+    $(".color-picker").spectrum("set", '#000000');
+    Session.set('clientEditId', null);
     Session.set('clientNewOpen', true);
   },
   "click .employee-new-toggle": function (e) {
     e.preventDefault();
+    $('#employee-name').val('');
+    $('#employee-title').val('');
+    $('#employee-picture').val('');
+    Session.set('employeeEditId', null);
     Session.set('employeeNewOpen', true);
   }
 });

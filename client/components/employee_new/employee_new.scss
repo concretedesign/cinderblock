@@ -1,6 +1,8 @@
 @import "bourbon/bourbon";
 @import "neat/neat";
 
+@import "../../styles/variables";
+
 .employee-new-container {
   position: relative;
 }
@@ -30,4 +32,9 @@
 
 .employee-new-container.open .employee-new {
   max-height: 400px;
+}
+
+.employee-delete {
+  float: right;
+  background-color: $delete-button-color;
 }
