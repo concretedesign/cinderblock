@@ -2,11 +2,11 @@
   <div class="timeline">
     {{#each employee_clients}}
       <h3>{{clientName client_id}}</h3>
-      <ul>
+      <div class="client-bar" style="background-color: {{clientColor client_id}}; width: {{barWidth}};">
         {{#each work}}
-          <li>{{formatWork this}}</li>
+          {{formatWork this}}
         {{/each}}
-      </ul>
+      </div>
     {{else}}
       This employee has nothing to do!
     {{/each}}

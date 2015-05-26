@@ -3,4 +3,24 @@
 
 .timeline {
   @include span-columns(10);
+
+  h3 {
+    color: #BEBCBC;
+    font-size: 18px;
+    margin: 10px 0 3px 0;
+  }
+}
+
+.client-bar {
+  position: relative;
+  height: 4px;
+  border-radius: 2px;
+  overflow: visible;
+}
+
+.work-bar {
+  position: absolute;
+  top: 4px;
+  background-color: inherit;
+  opacity: 0.2;
 }
