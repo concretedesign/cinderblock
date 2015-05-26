@@ -12,13 +12,13 @@ Template.timeline.helpers({
     return Clients.findOne(clientId).color || '#000000';
   },
   formatWork: function (workId) {
-    var work = Work.findOne(new Meteor.Collection.ObjectID(workId));
+    var work = Work.findOne({ _id: workId });
     if (work) {
       var start = moment(work.start);
       var end = moment(work.end);
 
       // For x position, get difference between minDate and start
-      var daysFromStart = moment(Session.get('minDate')).diff(start, 'days');
+      var daysFromStart = Math.abs(moment(Session.get('minDate')).diff(start, 'days'));
       var posX = daysFromStart * dayWidth;
 
       // For width, get difference between start and end
@@ -39,5 +39,27 @@ Template.timeline.helpers({
   barWidth: function () {
     var dateDiff = Session.get('dateDiff') || 365;
     return (dateDiff * dayWidth) + 'px';
+  }
+});
+
+Template.timeline.events({
+  "dblclick .client-bar-container": function (e) {
+    // Get days from minDate by dividing xPos by dayWidth
+    var days = Math.floor(e.offsetX / dayWidth);
+    var daysFromStart = moment(Session.get('minDate')).add(days, 'days');
+
+    Work.insert({
+      start: daysFromStart.format(),
+      end: daysFromStart.add(1, 'days').format(),
+      hotness: 5
+    }, function (error, result) {
+      if (error) {
+        console.error(error);
+      } else {
+        // Result is the ID
+        EmployeeClients.update(this._id, { $push: { work: result } });
+      }
+    }.bind(this));
+
   }
 });
