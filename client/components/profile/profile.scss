@@ -4,6 +4,7 @@
 .profile {
   text-align: center;
   cursor: pointer;
+  padding: 10px;
   @include span-columns(2);
 
   h1 {
