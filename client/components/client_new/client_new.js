@@ -50,7 +50,7 @@ Template.client_new.helpers({
   clientId: function() {
     return Session.get('clientEditId');
   }
-})
+});
 
 Template.client_new.onRendered(function () {
   // See https://bgrins.github.io/spectrum/ for options

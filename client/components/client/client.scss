@@ -7,6 +7,10 @@
   cursor: pointer;
   margin-bottom: 20px;
 
+  &.dragging {
+    position: fixed;
+  }
+
   h1 {
     text-align: center;
     line-height: 100px;

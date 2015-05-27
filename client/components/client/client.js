@@ -1,9 +1,5 @@
 Template.client.events({
-  "click .delete": function (e) {
-    e.preventDefault();
-    Clients.remove(this._id);
-  },
-  "click .client": function (e) {
+  "dblclick .client": function (e) {
     Session.set('clientEditId', this._id);
     Session.set('clientNewOpen', true);
 

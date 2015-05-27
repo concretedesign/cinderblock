@@ -42,7 +42,7 @@ main {
   padding: 20px;
   height: 100%;
   width: $client-panel-width;
-  overflow: auto;
+  overflow: visible;
   background-color: #EBF0EF;
   @include transition(left 400ms ease-in-out);
 
