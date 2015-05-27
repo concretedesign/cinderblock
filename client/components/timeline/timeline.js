@@ -1,4 +1,6 @@
-const dayWidth = 20;
+const dayWidth = 40;
+const minBarHeight = 4;
+const maxBarHeight = 40;
 
 Template.timeline.helpers({
   employee_clients: function () {
@@ -63,3 +65,37 @@ Template.timeline.events({
 
   }
 });
+
+Template.timeline.onRendered(function () {
+  var offset = this.firstNode.offsetLeft;
+  interact('.work-bar')
+  .draggable({
+    onmove: function (event) {
+      var x = event.pageX - offset;
+      event.target.style.left = x + 'px';
+    }
+  })
+  .resizable({
+    edges: { left: false, right: true, bottom: true, top: false },
+    autoScroll: true
+  })
+  .on('resizemove', function (event) {
+    var target = event.target,
+        x = (parseFloat(target.getAttribute('data-x')) || 0),
+        y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+    // update the element's style
+    target.style.width  = event.rect.width + 'px';
+    target.style.height = Math.max(minBarHeight, Math.min(maxBarHeight, event.rect.height)) + 'px';
+
+    // translate when resizing from top or left edges
+    x += event.deltaRect.left;
+    y += event.deltaRect.top;
+
+    target.style.webkitTransform = target.style.transform =
+        'translate(' + x + 'px,' + y + 'px)';
+
+    target.setAttribute('data-x', x);
+    target.setAttribute('data-y', y);
+  })
+})

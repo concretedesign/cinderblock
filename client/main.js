@@ -85,44 +85,48 @@ Template.clients.helpers({
 window.draggingClient = false;
 window.clientThumb;
 Template.clients.onRendered(function () {
+
   // See https://bgrins.github.io/spectrum/ for options
-  // target elements with the "draggable" class
   interact('.client').draggable({
-    // manualStart: true,
-    // keep the element within the area of it's parent
-    restrict: {
-      restriction: "parent",
-      endOnly: true,
-      elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
-    },
+
+    autoScroll: true,
+    max: Infinity,
 
     onstart: function (event) {
-      console.log('start drag')
       window.draggingClient = false;
       window.clientThumb = event.target.cloneNode(true);
       window.clientThumb.classList.add('dragging');
+
       window.clientThumb.style.left = event.target.offsetLeft + 'px';
       window.clientThumb.style.top = event.target.offsetTop + 'px';
+      // window.clientThumb.style.webkitTransform =
+      // window.clientThumb.style.transform =
+      //   'translate(' + event.target.offsetLeft + 'px, ' + event.target.offsetTop + 'px)';
+
       window.clientThumb.dataset.dragX = event.target.offsetLeft;
       window.clientThumb.dataset.dragY = event.target.offsetTop;
       document.body.appendChild(window.clientThumb);
     },
-    // call this function on every dragmove event
+
     onmove: function (event) {
       var x = (window.clientThumb.dataset.dragX|0) + event.dx;
       var y = (window.clientThumb.dataset.dragY|0) + event.dy;
-      console.log(x);
 
       window.clientThumb.style.left = x + 'px';
       window.clientThumb.style.top = y + 'px';
+      // window.clientThumb.style.webkitTransform =
+      // window.clientThumb.style.transform =
+      //   'translate(' + x + 'px, ' + y + 'px)';
+
+      event.interaction.x = x;
+      event.interaction.y = y;
 
       window.clientThumb.dataset.dragX = x;
       window.clientThumb.dataset.dragY = y;
     },
-    // call this function on every dragend event
+
     onend: function (event) {
       window.draggingClient = false;
-      console.log('finished dragging client');
       document.body.removeChild(window.clientThumb);
     }
   });
