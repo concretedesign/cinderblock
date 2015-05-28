@@ -30,6 +30,10 @@
   }
 }
 
+.container.open .employee-new {
+  left: $client-panel-width;
+}
+
 .employee-new-container.open .employee-new {
   max-height: 400px;
 }

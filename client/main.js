@@ -43,7 +43,18 @@ Template.employees.helpers({
   },
   minDate: Helpers.getMinDate,
   maxDate: Helpers.getMaxDate,
-  dateDiff: Helpers.getDateDiff
+  dateDiff: Helpers.getDateDiff,
+  formatDate: function (date) {
+    return moment(date).format('MMM d');
+  },
+  loopCount: function(count){
+    console.log(count);
+    var countArr = [];
+    for (var i=0; i<count; i++){
+      countArr.push({});
+    }
+    return countArr;
+  }
 });
 
 

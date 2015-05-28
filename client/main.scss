@@ -31,11 +31,15 @@ main {
 .client-panel-toggle {
   position: fixed;
   top: 14px;
-  right: 14px;
+  left: 54px;
   font-size: 46px;
   text-align: center;
   border-radius: 50%;
   width: 64px;
+  @include transition(left 400ms ease-in-out);
+}
+.open .client-panel-toggle {
+  left: $client-panel-width + 54px;
 }
 
 .client-panel {
@@ -61,4 +65,35 @@ main {
 
 .button-container {
   text-align: center;
+}
+
+.global-timeline {
+  margin: 0 0 24px 160px;
+  position: relative;
+
+  .global-min-date, .global-max-date {
+    position: absolute;
+    top: -28px;
+  }
+  .global-min-date {
+    left: -28px;
+  }
+  .global-max-date {
+    right: -28px;
+  }
+
+  ul {
+    font-size: 0;
+  }
+  li {
+    display: inline-block;
+    width: 40px;
+    height:5px;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+
+    &:first-child {
+      border-left: 1px solid black;
+    }
+  }
 }
