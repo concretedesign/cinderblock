@@ -32,6 +32,10 @@
 
 .container.open .employee-new {
   left: $client-panel-width;
+
+  a.employee-new-close {
+    right: $client-panel-width + 20px;
+  }
 }
 
 .employee-new-container.open .employee-new {
