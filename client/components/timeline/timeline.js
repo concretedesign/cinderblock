@@ -1,7 +1,3 @@
-const dayWidth = 40;
-const minBarHeight = 4;
-const maxBarHeight = 40;
-
 Template.timeline.helpers({
   employee_clients: function () {
     var id = this._id.valueOf();
@@ -21,17 +17,17 @@ Template.timeline.helpers({
 
       // For x position, get difference between minDate and start
       var daysFromStart = Math.abs(moment(Session.get('minDate')).diff(start, 'days'));
-      var posX = daysFromStart * dayWidth;
+      var posX = daysFromStart * Helpers.constants.dayWidth;
 
       // For width, get difference between start and end
       var jobDays = moment(end).diff(start, 'days');
-      var width = jobDays * dayWidth;
+      var width = jobDays * Helpers.constants.dayWidth;
 
       // For height, translate hotness
       var height = (work.hotness + 1) * 4;
 
       return Spacebars.SafeString(
-        '<div class="work-bar" style="left: ' + posX +
+        '<div class="work-bar" data-start="'+work.start+'" data-end="'+work.end+'" data-hotness="'+work.hotness+'" style="left: ' + posX +
           'px; width: ' + width + 'px; height: ' + height + 'px;"></div>'
       );
     } else {
@@ -39,15 +35,15 @@ Template.timeline.helpers({
     }
   },
   barWidth: function () {
-    var dateDiff = Session.get('dateDiff') || 365;
-    return (dateDiff * dayWidth) + 'px';
+    var dateDiff = Session.get('dateDiff') || Helpers.constants.defaultDays;
+    return (dateDiff * Helpers.constants.dayWidth) + 'px';
   }
 });
 
 Template.timeline.events({
   "dblclick .client-bar-container": function (e) {
     // Get days from minDate by dividing xPos by dayWidth
-    var days = Math.floor(e.offsetX / dayWidth);
+    var days = Math.floor(e.offsetX / Helpers.constants.dayWidth);
     var daysFromStart = moment(Session.get('minDate')).add(days, 'days');
 
     Work.insert({
@@ -63,6 +59,10 @@ Template.timeline.events({
       }
     }.bind(this));
 
+  },
+  'click .delete-employee-client': function (e) {
+    // FIXME: Delete associated work sessions
+    EmployeeClients.remove(this._id);
   }
 });
 
@@ -73,6 +73,12 @@ Template.timeline.onRendered(function () {
     onmove: function (event) {
       var x = event.pageX - offset;
       event.target.style.left = x + 'px';
+
+      // Calculate date based on position
+      var daysFromStart = x / Helpers.constants.dayWidth;
+      var date = moment(Session.get('minDate')).add(daysFromStart, 'days').format();
+
+      console.log(date);
     }
   })
   .resizable({
@@ -86,7 +92,7 @@ Template.timeline.onRendered(function () {
 
     // update the element's style
     target.style.width  = event.rect.width + 'px';
-    target.style.height = Math.max(minBarHeight, Math.min(maxBarHeight, event.rect.height)) + 'px';
+    target.style.height = Math.max(Helpers.constants.minBarHeight, Math.min(Helpers.constants.maxBarHeight, event.rect.height)) + 'px';
 
     // translate when resizing from top or left edges
     x += event.deltaRect.left;

@@ -33,46 +33,17 @@ Template.body.events({
   }
 });
 
-function getMaxDate () {
-  var date = Work.find({}, { limit: 1, sort: { end: -1 }, fields: { end: 1 } }).fetch().shift();
-  if (date) {
-    Session.set('maxDate', date.end);
-    return date.end;
-  } else {
-    return false;
-  }
-}
-
-function getMinDate () {
-  var date = Work.find({}, { limit: 1, sort: { start: 1 }, fields: { start: 1 } }).fetch().shift();
-  if (date) {
-    Session.set('minDate', date.start);
-    return date.start;
-  } else {
-    return false;
-  }
-}
-
-function getDateDiff () {
-  var minDate = getMinDate()
-  var maxDate = getMaxDate();
-
-  if (minDate && maxDate) {
-    var dateDiff = moment(maxDate).diff(moment(minDate), 'days');
-    Session.set('dateDiff', dateDiff);
-    return dateDiff;
-  } else {
-    return false
-  }
-}
-
 Template.employees.helpers({
   employees: function () {
     return Employees.find({});
   },
-  minDate: getMinDate,
-  maxDate: getMaxDate,
-  dateDiff: getDateDiff
+  barWidth: function () {
+    var dateDiff = Session.get('dateDiff') || Helpers.constants.defaultDays;
+    return (dateDiff * Helpers.constants.dayWidth) + 'px';
+  },
+  minDate: Helpers.getMinDate,
+  maxDate: Helpers.getMaxDate,
+  dateDiff: Helpers.getDateDiff
 });
 
 

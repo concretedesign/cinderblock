@@ -8,6 +8,18 @@
     color: #BEBCBC;
     font-size: 18px;
     margin: 10px 0 3px 0;
+    position: relative;
+
+    .delete-employee-client {
+      cursor: pointer;
+      position: absolute;
+      margin-left: 10px;
+      top: -3px;
+
+      &:hover {
+        color: #477DCA;
+      }
+    }
   }
 }
 

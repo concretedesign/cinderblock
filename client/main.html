@@ -4,9 +4,8 @@
 
 <body>
   <div class="container {{clientPanelState}}">
-    {{> header}}
     <main>
-      <a href="#" class="client-panel-toggle">♕</a>
+      <a href="#" class="client-panel-toggle"><img src="/img/cinderblock-transparent.png" /></a>
       <div class="client-panel">
         {{> clients}}
         <div class="button-container">
@@ -30,6 +29,12 @@
 
 <template name="employees">
   <div class="employees">
+    <div class="global-timeline-container">
+      <div class="global-timeline" style="width: {{barWidth}};">
+
+      </div>
+    </div>
+
     {{#each employees}}
       {{> employee}}
     {{/each}}

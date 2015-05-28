@@ -1,7 +1,7 @@
 <template name="timeline">
   <div class="timeline">
     {{#each employee_clients}}
-      <h3>{{clientName client_id}}</h3>
+      <h3>{{clientName client_id}}<span class="delete-employee-client">⨯</span></h3>
       <div class="client-bar-container">
         <div class="client-bar" style="background-color: {{clientColor client_id}}; width: {{barWidth}};">
           {{#each work}}
