@@ -27,8 +27,8 @@ Template.timeline.helpers({
       var height = (work.hotness + 1) * 4;
 
       return Spacebars.SafeString(
-        '<div class="work-bar" data-start="'+work.start+'" data-end="'+work.end+'" data-hotness="'+work.hotness+'" style="left: ' + posX +
-          'px; width: ' + width + 'px; height: ' + height + 'px;"></div>'
+        '<div class="work-bar" data-id="'+workId+'" data-start="'+work.start+'" data-end="'+work.end+'" data-hotness="'+work.hotness+'" style="left: ' + posX +
+          'px; width: ' + width + 'px; height: ' + height + 'px;"><span>'+moment(work.start).format('MMM d')+' - '+moment(work.end).format('MMM d')+'</span></div>'
       );
     } else {
       return '';
@@ -58,7 +58,6 @@ Template.timeline.events({
         EmployeeClients.update(this._id, { $push: { work: result } });
       }
     }.bind(this));
-
   },
   'click .delete-employee-client': function (e) {
     // FIXME: Delete associated work sessions
@@ -73,12 +72,20 @@ Template.timeline.onRendered(function () {
     onmove: function (event) {
       var x = event.pageX - offset;
       event.target.style.left = x + 'px';
+    },
+    onend: function (event) {
+      console.log('drag end');
+      var x = event.pageX - offset;
 
+      event.target.style.left = x + 'px';
       // Calculate date based on position
       var daysFromStart = x / Helpers.constants.dayWidth;
       var date = moment(Session.get('minDate')).add(daysFromStart, 'days').format();
 
-      console.log(date);
+      var diff = Math.abs(moment(event.target.dataset.start).diff(moment(event.target.dataset.end), 'days'));
+
+      var id = event.target.dataset.id;
+      Work.update(id, { $set: {start: date, end: moment(date).add(diff, 'day').format() }});
     }
   })
   .resizable({
@@ -91,7 +98,7 @@ Template.timeline.onRendered(function () {
         y = (parseFloat(target.getAttribute('data-y')) || 0);
 
     // update the element's style
-    target.style.width  = event.rect.width + 'px';
+    target.style.width = event.rect.width + 'px';
     target.style.height = Math.max(Helpers.constants.minBarHeight, Math.min(Helpers.constants.maxBarHeight, event.rect.height)) + 'px';
 
     // translate when resizing from top or left edges
@@ -103,5 +110,8 @@ Template.timeline.onRendered(function () {
 
     target.setAttribute('data-x', x);
     target.setAttribute('data-y', y);
+  })
+  .on('resizeend', function (event) {
+    console.log('resize end');
   })
 })

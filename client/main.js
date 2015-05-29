@@ -48,7 +48,6 @@ Template.employees.helpers({
     return moment(date).format('MMM d');
   },
   loopCount: function(count){
-    console.log(count);
     var countArr = [];
     for (var i=0; i<count; i++){
       countArr.push({});
