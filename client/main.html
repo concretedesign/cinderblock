@@ -26,29 +26,3 @@
     </div>
   </div>
 </body>
-
-<template name="employees">
-  <div class="employees">
-    <div class="global-timeline-container">
-      <div class="global-timeline" style="width: {{barWidth}};">
-        <div class="global-min-date">{{formatDate minDate}}</div>
-        <div class="global-max-date">{{formatDate maxDate}}</div>
-        <ul>
-          {{#each loopCount dateDiff}}
-            <li></li>
-          {{/each}}
-        </ul>
-      </div>
-    </div>
-
-    {{#each employees}}
-      {{> employee}}
-    {{/each}}
-  </div>
-</template>
-
-<template name="clients">
-  {{#each clients}}
-    {{> client}}
-  {{/each}}
-</template>

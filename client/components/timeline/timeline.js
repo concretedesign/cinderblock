@@ -28,7 +28,7 @@ Template.timeline.helpers({
 
       return Spacebars.SafeString(
         '<div class="work-bar" data-id="'+workId+'" data-start="'+work.start+'" data-end="'+work.end+'" data-hotness="'+work.hotness+'" style="left: ' + posX +
-          'px; width: ' + width + 'px; height: ' + height + 'px;"><span>'+moment(work.start).format('MMM d')+' - '+moment(work.end).format('MMM d')+'</span></div>'
+          'px; width: ' + width + 'px; height: ' + height + 'px;"><span>'+moment(work.start).format('MMM D')+' - '+moment(work.end).format('MMM D')+'</span></div>'
       );
     } else {
       return '';

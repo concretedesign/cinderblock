@@ -1,0 +1,17 @@
+<template name="employees">
+  <div class="employees">
+    <div class="global-timeline-container">
+      <div class="global-timeline" style="width: {{barWidth}};">
+        <ul>
+          {{#each loopCount 365}}
+            <li>{{#if displayDate}}<span class="big-date">{{displayDate}}</span>{{/if}}</li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+
+    {{#each employees}}
+      {{> employee}}
+    {{/each}}
+  </div>
+</template>
