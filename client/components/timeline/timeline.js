@@ -16,11 +16,11 @@ Template.timeline.helpers({
       var end = moment(work.end);
 
       // For x position, get difference between minDate and start
-      var daysFromStart = Math.abs(moment(Session.get('minDate')).diff(start, 'days'));
+      var daysFromStart = Math.abs(moment().startOf('day').diff(start.startOf('day'), 'days'));
       var posX = daysFromStart * Helpers.constants.dayWidth;
 
       // For width, get difference between start and end
-      var jobDays = moment(end).diff(start, 'days');
+      var jobDays = moment(end.startOf('day')).diff(start.startOf('day'), 'days');
       var width = jobDays * Helpers.constants.dayWidth;
 
       // For height, translate hotness
@@ -35,8 +35,8 @@ Template.timeline.helpers({
     }
   },
   barWidth: function () {
-    var dateDiff = Session.get('dateDiff') || Helpers.constants.defaultDays;
-    return (dateDiff * Helpers.constants.dayWidth) + 'px';
+    // var dateDiff = Session.get('dateDiff') || Helpers.constants.defaultDays;
+    return (Helpers.constants.defaultDays * Helpers.constants.dayWidth) + 'px';
   }
 });
 
