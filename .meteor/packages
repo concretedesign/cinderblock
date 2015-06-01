@@ -7,10 +7,10 @@
 meteor-platform
 autopublish
 insecure
-fourseven:scss
-wolves:bourbon
-wolves:neat
-wolves:bitters
 aldeed:collection2
 ryanswapp:spectrum-colorpicker
 momentjs:moment
+fourseven:scss
+wolves:bourbon
+wolves:bitters
+wolves:neat
