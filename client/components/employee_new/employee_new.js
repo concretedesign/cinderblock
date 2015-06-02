@@ -40,8 +40,13 @@ Template.employee_new.events({
   "click .employee-delete": function (e) {
     e.preventDefault();
     if (window.confirm("Are you sure you wish to remove this employee?")) {
-      // FIXME: Remove all employeeClients and work related to employee
       var employeeId = Session.get('employeeEditId');
+
+      // FIXME: This should be a server method
+      EmployeeClients.find({ employee_id: employeeId }).forEach(function (employeeClient) {
+        EmployeeClients.remove(employeeClient._id);
+      });
+
       if (employeeId) {
         Employees.remove(employeeId);
       }

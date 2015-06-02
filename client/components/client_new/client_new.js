@@ -35,8 +35,13 @@ Template.client_new.events({
   "click .client-delete": function (e) {
     e.preventDefault();
     if (window.confirm("Are you sure you wish to remove this client?")) {
-      // FIXME: Remove from EmployeeClient, remove all connected work
       var clientId = Session.get('clientEditId');
+
+      // FIXME: This should be a server method
+      EmployeeClients.find({ client_id: clientId }).forEach(function (employeeClient) {
+        EmployeeClients.remove(employeeClient._id);
+      });
+
       if (clientId) {
         Clients.remove(clientId);
       }

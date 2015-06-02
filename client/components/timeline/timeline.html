@@ -4,7 +4,7 @@
       {{#if isVisible client_id}}
         <h3>{{clientName client_id}}<span class="delete-employee-client">⨯</span></h3>
         <div class="client-bar-container">
-          <div class="client-bar" style="background-color: {{clientColor client_id}}; width: {{barWidth}};">
+          <div class="client-bar" data-client_id="{{client_id}}" style="background-color: {{clientColor client_id}}; width: {{barWidth}};">
             {{#each work}}
               {{formatWork this}}
             {{/each}}

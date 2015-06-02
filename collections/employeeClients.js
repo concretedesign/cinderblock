@@ -18,3 +18,11 @@ var employeeClientSchema = new SimpleSchema({
 });
 
 EmployeeClients.attachSchema(employeeClientSchema);
+
+// Hooks
+EmployeeClients.after.remove(function(userId, doc) {
+  doc.work.forEach(function (workId) {
+    Work.remove(workId);
+    console.log('removed ' + workId);
+  })
+});

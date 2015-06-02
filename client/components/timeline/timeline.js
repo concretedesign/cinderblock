@@ -62,8 +62,15 @@ Template.timeline.events({
       }
     }.bind(this));
   },
+  "dblclick .work-bar": function (e) {
+    // Delete the work item
+    e.stopPropagation();
+    var employeeId = e.delegateTarget.children[0].dataset.employee_id;
+    var clientId = e.target.parentElement.dataset.client_id;
+    EmployeeClients.update(EmployeeClients.findOne({ employee_id: employeeId, client_id: clientId })._id, { $pull: { work: this.valueOf() }});
+    Work.remove(this.valueOf());
+  },
   'click .delete-employee-client': function (e) {
-    // FIXME: Delete associated work sessions
     EmployeeClients.remove(this._id);
   }
 });
@@ -72,6 +79,9 @@ Template.timeline.onRendered(function () {
   var offset = this.firstNode.offsetLeft;
   interact('.work-bar')
   .draggable({
+    restrict: {
+      restriction: '.client-bar',
+    },
     onmove: function (event) {
       var x = event.pageX - offset;
       event.target.style.left = x + 'px';
