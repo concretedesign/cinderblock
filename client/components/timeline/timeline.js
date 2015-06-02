@@ -9,6 +9,9 @@ Template.timeline.helpers({
   clientColor: function (clientId) {
     return Clients.findOne(clientId).color || '#000000';
   },
+  isVisible: function (clientId) {
+    return !Clients.findOne(clientId).hidden;
+  },
   formatWork: function (workId) {
     var work = Work.findOne({ _id: workId });
     if (work) {

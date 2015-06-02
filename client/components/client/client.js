@@ -1,5 +1,5 @@
 Template.client.events({
-  "dblclick .client": function (e) {
+  "click .client": function (e) {
     Session.set('clientEditId', this._id);
     Session.set('clientNewOpen', true);
 
@@ -7,5 +7,12 @@ Template.client.events({
     $('#client-name').val(this.name);
     $('#color').val(this.color);
     $(".color-picker").spectrum("set", this.color);
+  },
+  "dblclick .client": function (e) {
+    console.log('double')
+  },
+  "click .visibility": function (e) {
+    e.stopPropagation();
+    Clients.update(this._id, { $set: { hidden: !this.hidden }});
   }
 });

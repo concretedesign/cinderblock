@@ -10,6 +10,10 @@ var clientSchema = new SimpleSchema({
     type: String,
     label: "Color",
     max: 7
+  },
+  hidden: {
+    type: Boolean,
+    label: "Hidden"
   }
 });
 
