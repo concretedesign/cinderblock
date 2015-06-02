@@ -1,3 +1,7 @@
+Template.body.onRendered(function () {
+  Session.set('clientPanelOpen', false);
+});
+
 Template.body.helpers({
   clientPanelState: function () {
     return Session.get('clientPanelOpen') ? 'open': '';

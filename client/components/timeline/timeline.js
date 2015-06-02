@@ -84,10 +84,9 @@ Template.timeline.onRendered(function () {
     },
     onmove: function (event) {
       var x = event.pageX - offset;
-      event.target.style.left = x + 'px';
+      event.target.style.left = (Session.get('clientPanelOpen') ? (x - 240) : x) + 'px';
     },
     onend: function (event) {
-      console.log('drag end');
       var x = event.pageX - offset;
 
       event.target.style.left = x + 'px';
