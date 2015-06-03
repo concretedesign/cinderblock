@@ -6,15 +6,19 @@
 
   h3 {
     color: #BEBCBC;
-    font-size: 18px;
-    margin: 10px 0 3px 0;
+    font-size: 14px;
+    margin: -6px 0 3px 0;
     position: relative;
+    pointer-events: none;
+    opacity: 1; // FIXME: Set this back to 0
+    @include transition(opacity 500ms ease-in);
 
     .delete-employee-client {
       cursor: pointer;
       position: absolute;
       margin-left: 10px;
       top: -3px;
+      pointer-events: all;
 
       &:hover {
         color: #477DCA;
@@ -34,27 +38,37 @@
   /* Rules below not implemented in browsers yet */
   -o-user-select: none;
   user-select: none;
+
+  &:hover + h3 {
+    opacity: 1;
+  }
 }
 
 .client-bar {
   position: relative;
-  height: 4px;
+  height: 2px;
   border-radius: 2px;
   overflow: visible;
 }
 
 .work-bar {
   position: absolute;
-  top: 4px;
+  top: 1px;
   background-color: inherit;
   opacity: 0.3;
+  @include transform(translateY(-50%));
 
   span {
-    color: #000;
+    color: #fff;
     width: 100px;
     position: absolute;
     font-size: 12px;
     top: -24px;
+    opacity: 0;
     @include transition(opacity 400ms ease-in-out);
+  }
+
+  &:hover span {
+    opacity: 1;
   }
 }
