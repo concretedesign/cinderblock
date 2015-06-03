@@ -136,6 +136,13 @@ Template.timeline.onRendered(function () {
     })
     .resizable({
       edges: { left: false, right: true, bottom: true, top: false },
+      snap: {
+        targets: [
+          interact.createSnapGrid({ x: 40 })
+        ],
+        range: Infinity,
+        relativePoints: [ { x: 0, y: 0 } ]
+      },
       autoScroll: true,
       onmove: function (event) {
         var target = event.target;
