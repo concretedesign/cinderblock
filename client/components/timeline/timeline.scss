@@ -55,11 +55,6 @@
     position: absolute;
     font-size: 12px;
     top: -24px;
-    opacity: 0;
     @include transition(opacity 400ms ease-in-out);
-  }
-
-  &:hover span {
-    opacity: 1;
   }
 }

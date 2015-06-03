@@ -77,53 +77,75 @@ Template.timeline.events({
 
 Template.timeline.onRendered(function () {
   var offset = this.firstNode.offsetLeft;
-  interact('.work-bar')
-  .draggable({
-    restrict: {
-      restriction: '.client-bar',
-    },
-    onmove: function (event) {
-      var x = event.pageX - offset;
-      event.target.style.left = (Session.get('clientPanelOpen') ? (x - 240) : x) + 'px';
-    },
-    onend: function (event) {
+
+  function getStartDate (event) {
+    if (event.type == 'resizemove' || event.type == 'resizeend') {
+      return moment(new Date(event.target.dataset.start));
+    } else {
       var x = event.pageX - offset;
 
-      event.target.style.left = x + 'px';
       // Calculate date based on position
-      var daysFromStart = x / Helpers.constants.dayWidth;
-      var date = moment(Session.get('minDate')).add(daysFromStart, 'days').format();
-
-      var diff = Math.abs(moment(event.target.dataset.start).diff(moment(event.target.dataset.end), 'days'));
-
-      var id = event.target.dataset.id;
-      Work.update(id, { $set: {start: date, end: moment(date).add(diff, 'day').format() }});
+      var daysFromStart = Math.round(x / Helpers.constants.dayWidth);
+      return moment(Session.get('minDate')).add(daysFromStart, 'days');
     }
-  })
-  .resizable({
-    edges: { left: false, right: true, bottom: true, top: false },
-    autoScroll: true
-  })
-  .on('resizemove', function (event) {
-    var target = event.target,
-        x = (parseFloat(target.getAttribute('data-x')) || 0),
-        y = (parseFloat(target.getAttribute('data-y')) || 0);
+  }
 
-    // update the element's style
-    target.style.width = event.rect.width + 'px';
-    target.style.height = Math.max(Helpers.constants.minBarHeight, Math.min(Helpers.constants.maxBarHeight, event.rect.height)) + 'px';
+  function getEndDate (startDate, daysDiff) {
+    return moment(startDate).add(daysDiff, 'day');
+  }
 
-    // translate when resizing from top or left edges
-    x += event.deltaRect.left;
-    y += event.deltaRect.top;
+  function calculateWork (event) {
+    var startDate = getStartDate(event).format();
 
-    target.style.webkitTransform = target.style.transform =
-        'translate(' + x + 'px,' + y + 'px)';
+    var daysDiff = Math.max(Math.round(parseInt(event.target.style.width) / Helpers.constants.dayWidth), 1);
 
-    target.setAttribute('data-x', x);
-    target.setAttribute('data-y', y);
-  })
-  .on('resizeend', function (event) {
-    console.log('resize end');
-  })
+    var hotness = Math.round(parseInt(event.target.style.height, 10) / 4 - 1);
+
+    var id = event.target.dataset.id;
+    Work.update(id, { $set: {start: startDate, end: getEndDate(startDate, daysDiff).format(), hotness: hotness }});
+  }
+
+  function setLabel (event) {
+    // FIXME: This could be optimized to return if we haven't changed days (i.e. moved < 40px)
+    var startDate = getStartDate(event);
+    var daysDiff = Math.max(Math.round(parseInt(event.target.style.width) / Helpers.constants.dayWidth), 1);
+    var endDate = getEndDate(startDate, daysDiff);
+
+    event.target.children[0].innerHTML = startDate.format('MMM D') + ' - ' + endDate.format('MMM D');
+  }
+
+  interact('.work-bar')
+    .draggable({
+      snap: {
+        targets: [
+          interact.createSnapGrid({ x: 40 })
+        ],
+        range: Infinity,
+        relativePoints: [ { x: 0, y: 0 } ]
+      },
+      restrict: {
+        restriction: '.client-bar',
+      },
+      onmove: function (event) {
+        var x = event.pageX - offset;
+        event.target.style.left = (Session.get('clientPanelOpen') ? (x - 240) : x) + 'px';
+
+        setLabel(event);
+      },
+      onend: calculateWork
+    })
+    .resizable({
+      edges: { left: false, right: true, bottom: true, top: false },
+      autoScroll: true,
+      onmove: function (event) {
+        var target = event.target;
+
+        // update the element's style
+        target.style.width = Math.max(Helpers.constants.dayWidth, event.rect.width) + 'px';
+        target.style.height = Math.max(Helpers.constants.minBarHeight, Math.min(Helpers.constants.maxBarHeight, event.rect.height)) + 'px';
+
+        setLabel(event);
+      },
+      onend: calculateWork
+    })
 })
