@@ -140,7 +140,7 @@ Template.timeline.onRendered(function () {
       edges: { left: false, right: true, bottom: true, top: true },
       snap: {
         targets: [
-          interact.createSnapGrid({ x: 40 })
+          interact.createSnapGrid({ x: 40, y: 4 })
         ],
         range: Infinity,
         relativePoints: [ { x: 0, y: 0 } ]
