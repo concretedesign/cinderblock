@@ -12,13 +12,13 @@ Template.timeline.helpers({
   isVisible: function (clientId) {
     return !Clients.findOne(clientId).hidden;
   },
-  formatWork: function (workId) {
+  formatWork: function (workId, clientId) {
     var work = Work.findOne({ _id: workId });
     if (work) {
       var start = moment(work.start);
       var end = moment(work.end);
-      
-      // var client = Clients.findOne(clientId)
+
+      var client = Clients.findOne(clientId);
 
       // For x position, get difference between minDate and start
       var daysFromStart = Math.abs(moment().startOf('day').diff(start.startOf('day'), 'days'));
@@ -33,7 +33,7 @@ Template.timeline.helpers({
 
       return Spacebars.SafeString(
         '<div class="work-bar" data-id="'+workId+'" data-start="'+work.start+'" data-end="'+work.end+'" data-hotness="'+work.hotness+'" style="left: ' + posX +
-          'px; width: ' + width + 'px; height: ' + height + 'px; background-color: '+work.color+'"><span>'+moment(work.start).format('MMM D')+' - '+moment(work.end).format('MMM D')+'</span></div>'
+          'px; width: ' + width + 'px; height: ' + height + 'px; background-color: '+client.color+'"><span>'+moment(work.start).format('MMM D')+' - '+moment(work.end).format('MMM D')+'</span></div>'
       );
     } else {
       return '';
@@ -137,7 +137,7 @@ Template.timeline.onRendered(function () {
       onend: calculateWork
     })
     .resizable({
-      edges: { left: false, right: true, bottom: true, top: false },
+      edges: { left: false, right: true, bottom: true, top: true },
       snap: {
         targets: [
           interact.createSnapGrid({ x: 40 })

@@ -2,13 +2,12 @@
   <div class="timeline">
     {{#each employee_clients}}
       {{#if isVisible client_id}}
-        <h3>{{clientName client_id}}<span class="delete-employee-client">⨯</span></h3>
         <div class="client-bar-container">
-          <div class="client-bar" data-client_id="{{client_id}}" style="background-color: {{clientColor client_id}}; width: {{barWidth}};">
-            {{#each work}}
-              {{formatWork this}}
-            {{/each}}
-          </div>
+          {{#each work}}
+            {{formatWork this ../client_id}}
+          {{/each}}
+          <div class="client-bar" data-client_id="{{client_id}}" style="background-color: {{clientColor client_id}}; width: {{barWidth}};"></div>
+        <h3>{{clientName client_id}}<span class="delete-employee-client">⨯</span></h3>
         </div>
       {{/if}}
     {{else}}

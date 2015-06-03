@@ -6,8 +6,8 @@
 
   h3 {
     color: #BEBCBC;
-    font-size: 14px;
-    margin: -6px 0 3px 0;
+    font-size: rem(10);
+    margin-top: 2px;
     position: relative;
     pointer-events: none;
     opacity: 1; // FIXME: Set this back to 0
@@ -30,6 +30,8 @@
 .client-bar-container {
   height: 20px;
   padding-top: 8px;
+  margin-bottom: 4px;
+  position: relative;
 
   -webkit-user-select: none; /* Chrome/Safari */
   -moz-user-select: none; /* Firefox */
@@ -45,7 +47,6 @@
 }
 
 .client-bar {
-  position: relative;
   height: 2px;
   border-radius: 2px;
   overflow: visible;
@@ -53,17 +54,16 @@
 
 .work-bar {
   position: absolute;
-  top: 1px;
-  background-color: inherit;
-  opacity: 0.3;
+  top: 9px;
+  opacity: 0.8;
   @include transform(translateY(-50%));
 
   span {
     color: #fff;
     width: 100px;
     position: absolute;
-    font-size: 12px;
-    top: -24px;
+    font-size: rem(10);
+    top: -14px;
     opacity: 0;
     @include transition(opacity 400ms ease-in-out);
   }
