@@ -36,11 +36,17 @@
     .employees {
       width: 10000px;
 
+      .stream-employee.current .profile {
+        opacity: 1;
+      }
+
       .profile {
         cursor: pointer;
         display: inline-block;
         width: auto;
+        opacity: 0.3;
         margin-left: 32px;
+        @include transition(opacity 500ms ease-in);
 
         h1 {
           font-size: rem(12);

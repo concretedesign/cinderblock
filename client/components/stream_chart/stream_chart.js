@@ -8,6 +8,9 @@ Template.stream_chart.helpers({
   employees: function () {
     return Employees.find({});
   },
+  isCurrentStream: function () {
+    return Session.equals('streamChartEmployeeId', this._id) ? 'current' : '';
+  }
 });
 
 Template.stream_chart.events({
@@ -18,6 +21,7 @@ Template.stream_chart.events({
     Session.set('streamChartEmployeeId', this._id);
   },
   'click .stream-employee': function (e) {
+    Session.set('streamChartEmployeeId', this._id)
     streamViz.transition();
   }
 });
