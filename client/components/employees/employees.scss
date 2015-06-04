@@ -1,12 +1,43 @@
 @import "bourbon/bourbon";
 @import "neat/neat";
 
+@import "../../styles/variables";
+
 .employees {
 }
 
+.employee-new-toggle {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  font-size: rem(12);
+}
 
+.profile-container {
+  position: fixed;
+  z-index: 1;
+  overflow-y: scroll;
+  left: 0;
+  width: $employee-panel-width;
+  height: 100%;
+  background-color: $background-color;
+  padding-top: 40px;
+}
+
+.timeline-container {
+  margin-left: $employee-panel-width;
+  position: fixed;
+  overflow: scroll;
+  height: 100%;
+  width: 100%;
+  padding-top: 40px;
+}
+.global-timeline-container {
+  position: absolute;
+}
 .global-timeline {
-  margin: 0 0 24px 160px;
+  top: -20px;
+  margin: 0 0 24px 0;
   position: relative;
 
   .big-date {

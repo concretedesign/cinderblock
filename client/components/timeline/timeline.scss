@@ -2,7 +2,8 @@
 @import "neat/neat";
 
 .timeline {
-  @include span-columns(10);
+  margin-bottom: 35px;
+  min-height: 115px;
 
   h3 {
     color: #BEBCBC;

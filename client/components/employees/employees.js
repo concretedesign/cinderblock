@@ -24,3 +24,9 @@ Template.employees.helpers({
     return countArr;
   }
 });
+
+
+Template.employees.onRendered(function () {
+  // Make sure employees and timelines are equal height and scroll together
+  setTimeout(Helpers.alignPanels, 1500);
+})
