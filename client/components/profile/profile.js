@@ -41,6 +41,7 @@ Template.profile.onRendered(function () {
       EmployeeClients.insert(
         { client_id: clientId, employee_id: employeeId, work: [] }
       );
+      Helpers.alignPanels();
     }
   });
 });

@@ -74,6 +74,7 @@ Template.timeline.events({
   },
   'click .delete-employee-client': function (e) {
     EmployeeClients.remove(this._id);
+    Helpers.alignPanels();
   }
 });
 
