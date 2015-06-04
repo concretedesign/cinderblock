@@ -1,7 +1,24 @@
 <template name="stream_chart">
   <div class="stream-chart">
-    <h1 class="label">2 week workload <span class="transition">(change)</span></h1>
+    <h1 class="label">2 week workload</h1>
     <h1 class="close">╳</h1>
     <div class="viz"></div>
+    <div class="stream-employees-container">
+      <ul class="employees">
+        {{#each employees}}
+          <li class="stream-employee">
+            {{> stream_profile}}
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+</template>
+
+<template name="stream_profile">
+  <div class="profile">
+    <img src="{{picture}}" />
+    <h1>{{name}}</h1>
+    <h2>{{title}}</h2>
   </div>
 </template>

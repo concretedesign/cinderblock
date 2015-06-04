@@ -4,7 +4,10 @@ Template.stream_chart.helpers({
   },
   employeeId: function () {
     return Session.get('streamChartEmployeeId') || Employees.findOne()._id;
-  }
+  },
+  employees: function () {
+    return Employees.find({});
+  },
 });
 
 Template.stream_chart.events({
@@ -14,7 +17,7 @@ Template.stream_chart.events({
   "click .profile": function (e) {
     Session.set('streamChartEmployeeId', this._id);
   },
-  "click .transition": function (e) {
+  'click .stream-employee': function (e) {
     streamViz.transition();
   }
 });
@@ -90,7 +93,7 @@ function Viz () {
         return layers0 = d;
       })
     .transition()
-      .duration(2500)
+      .duration(1500)
       .attr("d", area);
   }
 
