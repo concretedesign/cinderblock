@@ -15,16 +15,21 @@ Template.employees.helpers({
   loopCount: function(count){
     var countArr = [];
     for (var i = 0; i < count; i++) {
+      var date = moment().add(i, 'days');
+      var item = {};
       if (i === 0 || i === count - 1 || moment().add(i, 'days').date() === 1) {
-        countArr.push({ displayDate: moment().add(i, 'days').format('MMM D') });
+        item.displayDate = moment().add(i, 'days').format('MMM D');
       } else {
-        countArr.push({ displayDate: false });
+        item.displayDate = false;
       }
+
+      item.weekend = date.day() == 0 || date.day() == 6;
+
+      countArr.push(item);
     }
     return countArr;
   }
 });
-
 
 Template.employees.onRendered(function () {
   // Make sure employees and timelines are equal height and scroll together

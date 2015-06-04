@@ -22,6 +22,10 @@
   height: 100%;
   background-color: $background-color;
   padding-top: 40px;
+  @include transition(left 400ms ease-in-out);
+}
+.open .profile-container {
+  left: $client-panel-width;
 }
 
 .timeline-container {
@@ -64,6 +68,13 @@
 
     &:first-child {
       border-left: 1px solid #fff;
+    }
+
+    .weekend {
+      background-color: #d9d9d9;
+      opacity: 0.2;
+      position: absolute;
+      width: 100%;
     }
   }
 }

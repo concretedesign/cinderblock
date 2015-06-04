@@ -11,7 +11,10 @@
         <div class="global-timeline" style="width: {{barWidth}};">
           <ul>
             {{#each loopCount 365}}
-              <li>{{#if displayDate}}<span class="big-date">{{displayDate}}</span>{{/if}}</li>
+              <li>
+                {{#if displayDate}}<span class="big-date">{{displayDate}}</span>{{/if}}
+                {{#if weekend}}<span class="weekend"></span>{{/if}}
+              </li>
             {{/each}}
           </ul>
         </div>

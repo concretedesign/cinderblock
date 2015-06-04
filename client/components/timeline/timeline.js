@@ -78,7 +78,7 @@ Template.timeline.events({
 });
 
 Template.timeline.onRendered(function () {
-  var offset = this.firstNode.offsetLeft;
+  var offset = this.firstNode.offsetLeft + 145; // 145 is offset left caused by employee sidebar
 
   function getStartDate (event) {
     if (event.type == 'resizemove' || event.type == 'resizeend') {
@@ -129,7 +129,7 @@ Template.timeline.onRendered(function () {
         restriction: '.client-bar',
       },
       onmove: function (event) {
-        var x = event.pageX - offset;
+        var x = event.pageX - offset - (Session.get('clientPanelOpen') ? 240 : 0);
         event.target.style.left = (Session.get('clientPanelOpen') ? (x - 240) : x) + 'px';
 
         setLabel(event);
