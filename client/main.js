@@ -11,6 +11,9 @@ Template.body.helpers({
   },
   employeeNewState: function () {
     return Session.get('employeeNewOpen') ? 'open': '';
+  },
+  streamChartVisible: function () {
+    return Session.get('streamChartVisible') || false;
   }
 });
 
