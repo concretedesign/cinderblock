@@ -28,12 +28,15 @@ Template.stream_chart.events({
 
 Template.stream_chart.onRendered(function () {
   window.streamViz = new Viz();
-  // setTimestreamViz.transition(Employees.findOne()._id);
+
+  var employeeId = Session.get('streamChartEmployeeId') || Employees.findOne()._id;
+  streamViz.transition(employeeId);
 })
 
 function Viz () {
   const TRANSITION_DURATION = 400;
-  var startDate, endDate, stack, nest, layers, width, height, x, y, color, area, svg, format, numDays, colors, clientNames, datearray = [], $tooltip;
+  var startDate, endDate, stack, nest, layers, width, height, x, y, color,
+    area, svg, format, numDays, colors, clientNames, datearray = [], $tooltip;
 
   var _getClientColors = function () {
     var clientColors = [];
@@ -196,7 +199,6 @@ function Viz () {
     svg = d3.select(".viz").append("svg")
       .attr("width", width)
       .attr("height", height);
-
   }
 
 

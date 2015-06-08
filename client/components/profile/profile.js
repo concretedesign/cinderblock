@@ -14,9 +14,8 @@ Template.profile.events({
   },
   "click .viz-toggle": function (e) {
     e.stopPropagation();
-    Session.set('streamChartVisible', true);
-    console.log(this._id);
     Session.set('streamChartEmployeeId', this._id);
+    Session.set('streamChartVisible', true);
   }
 });
 
