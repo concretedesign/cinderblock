@@ -32,6 +32,7 @@ Template.stream_chart.onRendered(function () {
 })
 
 function Viz () {
+  const TRANSITION_DURATION = 400;
   var startDate, endDate, stack, nest, layers, width, height, x, y, color, area, svg, format, numDays, colors;
 
 
@@ -96,22 +97,28 @@ function Viz () {
 
     layers = stack(nest.entries(data));
 
+    // Data join
     var paths = svg.selectAll("path").data(layers)
 
+    // Update
+    paths
+      .transition().duration(TRANSITION_DURATION)
+      .attr("d", function (d) { return area(d.values); })
+      .style("fill", function (d) {
+        return colors[d.key];
+      });
+
+    // Enter
     paths.enter()
       .append("path")
+      .transition().duration(TRANSITION_DURATION)
       .attr("d", function (d) { return area(d.values); })
       .style("fill", function (d) {
         return colors[d.key];
       })
 
-    svg.selectAll("path").attr("d", function (d) { return area(d.values); })
-      .style("fill", function (d) {
-        return colors[d.key];
-      }).transition().duration(1500);
-
-
-    paths.exit().remove();
+    // Exit
+    paths.exit().transition().duration(TRANSITION_DURATION).remove();
   }
 
   var _init = function () {
