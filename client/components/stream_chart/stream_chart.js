@@ -33,9 +33,7 @@ Template.stream_chart.onRendered(function () {
 
 function Viz () {
   const TRANSITION_DURATION = 400;
-  var startDate, endDate, stack, nest, layers, width, height, x, y, color, area, svg, format, numDays, colors;
-
-
+  var startDate, endDate, stack, nest, layers, width, height, x, y, color, area, svg, format, numDays, colors, clientNames, datearray = [], $tooltip;
 
   var _getClientColors = function () {
     var clientColors = [];
@@ -43,6 +41,14 @@ function Viz () {
       clientColors[client._id] = client.color;
     })
     return clientColors;
+  }
+
+  var _getClientNames = function () {
+    var clientNames = [];
+    Clients.find().forEach(function (client) {
+      clientNames[client._id] = client.name;
+    })
+    return clientNames;
   }
 
   // startDate and endDate should be moment objects
@@ -87,6 +93,34 @@ function Viz () {
     // x.domain([startDate.toDate(), endDate.toDate()]);
   }
 
+  var _handleMouseOvers = function () {
+    var paths = svg.selectAll("path");
+
+    paths.on("mousemove", function(d, i) {
+      mousex = d3.mouse(this);
+      mousex = mousex[0];
+      var invertedx = x.invert(mousex);
+      invertedx = invertedx.getMonth() + invertedx.getDate();
+      var selected = (d.values);
+      for (var k = 0; k < selected.length; k++) {
+        datearray[k] = selected[k].date
+        datearray[k] = datearray[k].getMonth() + datearray[k].getDate();
+      }
+
+      mousedate = datearray.indexOf(invertedx);
+      date = moment(d.values[mousedate].date).format('MMM DD');
+
+      d3.select(this).classed("hover", true);
+
+      $tooltip.html( "<p>" + clientNames[d.key] + " - " + date + "</p>" );
+    })
+    .on("mouseout", function(d, i) {
+      d3.select(this)
+        .classed("hover", false);
+
+      $tooltip.html("");
+    });
+  }
 
   var _transition = function (employeeId) {
     var data = _getEmployeeData(employeeId, startDate, endDate);
@@ -119,6 +153,8 @@ function Viz () {
 
     // Exit
     paths.exit().transition().duration(TRANSITION_DURATION).remove();
+
+    _handleMouseOvers();
   }
 
   var _init = function () {
@@ -126,7 +162,10 @@ function Viz () {
     startDate = moment().startOf('isoweek');
     endDate = moment().startOf('isoweek').add(numDays, 'days');
 
+    $tooltip = $('.tooltip');
+
     colors = _getClientColors();
+    clientNames = _getClientNames();
 
     stack = d3.layout.stack().offset("silhouette")
       .values(function (d) { return d.values; })

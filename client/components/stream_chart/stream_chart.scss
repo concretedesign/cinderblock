@@ -18,7 +18,20 @@
 
     path {
       opacity: 0.7;
+      @include transition(opacity 400ms ease-in);
+
+      &:hover {
+        opacity: 1;
+      }
     }
+  }
+
+  .tooltip {
+    position: absolute;
+    left: 28px;
+    top: 70px;
+    font-size: 14px;
+    font-weight: 300;
   }
 
   .label {
