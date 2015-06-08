@@ -56,7 +56,7 @@ function Viz () {
         var date = moment(startDate).add(j, 'days');
         clientDates.push({
           clientId: client._id,
-          hotness: 1,
+          hotness: .1,
           date: date.format('MM/DD/YY')
         })
       }
@@ -71,7 +71,7 @@ function Viz () {
           if (date.isBetween(startDate.startOf('day'), endDate.endOf('day'))) {
 
             var index = _.indexOf(_.pluck(clientDates, 'date'), date.format('MM/DD/YY'));
-            clientDates[index].hotness = work.hotness + 1; // Add one because we've set 0 to 1 above
+            clientDates[index].hotness = work.hotness; // Add one because we've set 0 to 1 above
           }
         }
       });
@@ -102,12 +102,12 @@ function Viz () {
       .append("path")
       .attr("d", function (d) { return area(d.values); })
       .style("fill", function (d) {
-        return colors[d.key]; // FIXME: Should be looked up in an array of employeeId => employeeColors
+        return colors[d.key];
       })
 
     svg.selectAll("path").attr("d", function (d) { return area(d.values); })
       .style("fill", function (d) {
-        return colors[d.key]; // FIXME: Should be looked up in an array of employeeId => employeeColors
+        return colors[d.key];
       }).transition().duration(1500);
 
 
@@ -121,7 +121,7 @@ function Viz () {
 
     colors = _getClientColors();
 
-    stack = d3.layout.stack().offset("zeros")
+    stack = d3.layout.stack().offset("silhouette")
       .values(function (d) { return d.values; })
       .x(function (d) { return d.date; })
       .y(function (d) { return d.hotness; });
@@ -136,30 +136,22 @@ function Viz () {
       .y1(function(d) { return y(d.y0 + d.y); });
 
     width = $('.viz').width();
-    height = $('.viz').width() / 2;
+    height = $('.viz').width() / 3;
 
     format = d3.time.format("%m/%d/%y");
 
     x = d3.time.scale()
-      .domain([startDate.toDate(), endDate.toDate()])
+      .domain([startDate.toDate(), endDate.subtract(1, 'days').toDate()])
       .range([0, width]);
 
     y = d3.scale.linear()
       .domain([0, 10])
       .range([height, 0]);
 
-    color = d3.scale.linear()
-      .range(["#aad", "#556"]);
-
     svg = d3.select(".viz").append("svg")
       .attr("width", width)
       .attr("height", height);
 
-    // svg.selectAll("path")
-    //   .data(layers0)
-    // .enter().append("path")
-    //   .attr("d", area)
-    //   .style("fill", function() { return color(Math.random()); });
   }
 
 
