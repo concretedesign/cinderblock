@@ -53,21 +53,21 @@ function Viz () {
 
   // startDate and endDate should be moment objects
   var _getEmployeeData = function(employeeId, startDate, endDate) {
-    var data = [];
-    EmployeeClients.find({ employee_id: employeeId}).forEach(function (employeeClient) {
-      var client = Clients.findOne(employeeClient.client_id);
-
-      var clientDates = [];
-      // Fill baseline dates
+    // Create baseline data
+    var clientDates = {};
+    Clients.find().forEach(function (client) {
+      clientDates[client._id] = new Array();
       for (var j = 0; j < numDays; j++) {
         var date = moment(startDate).add(j, 'days');
-        clientDates.push({
+        clientDates[client._id].push({
           clientId: client._id,
           hotness: .1,
           date: date.format('MM/DD/YY')
         })
       }
+    });
 
+    EmployeeClients.find({ employee_id: employeeId}).forEach(function (employeeClient) {
       employeeClient.work.forEach(function (workId) {
         var work = Work.findOne(workId);
 
@@ -77,15 +77,14 @@ function Viz () {
           var date = moment(work.start).add(i, 'days');
           if (date.isBetween(startDate.startOf('day'), endDate.endOf('day'))) {
 
-            var index = _.indexOf(_.pluck(clientDates, 'date'), date.format('MM/DD/YY'));
-            clientDates[index].hotness = work.hotness; // Add one because we've set 0 to 1 above
+            var index = _.indexOf(_.pluck(clientDates[employeeClient.client_id], 'date'), date.format('MM/DD/YY'));
+            clientDates[employeeClient.client_id][index].hotness = work.hotness; // Add one because we've set 0 to 1 above
           }
         }
       });
-      data = data.concat(clientDates);
     });
 
-    return data;
+    return _.flatten(clientDates);
   }
 
   var _setDates = function(x) {
