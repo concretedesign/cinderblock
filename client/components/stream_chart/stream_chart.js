@@ -157,6 +157,13 @@ function Viz () {
     paths.exit().transition().duration(TRANSITION_DURATION).remove();
 
     _handleMouseOvers();
+
+    // Watch for data changes
+    Work.find().observeChanges({
+      changed: function(id, fields) {
+        _transition(employeeId)
+      }
+    });
   }
 
   var _init = function () {
