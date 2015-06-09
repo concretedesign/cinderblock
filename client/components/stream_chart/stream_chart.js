@@ -74,24 +74,8 @@ Template.stream_chart.onRendered(function () {
 
 function Viz () {
   const TRANSITION_DURATION = 400;
-  var startDate, endDate, stack, nest, layers, width, height, x, y, color,
+  var startDate, endDate, stack, nest, layers, width, height, x, y,
     area, svg, format, numDays, colors, clientNames, datearray = [], $tooltip;
-
-  var _getClientColors = function () {
-    var clientColors = [];
-    Clients.find().forEach(function (client) {
-      clientColors[client._id] = client.color;
-    })
-    return clientColors;
-  }
-
-  var _getClientNames = function () {
-    var clientNames = [];
-    Clients.find().forEach(function (client) {
-      clientNames[client._id] = client.name;
-    })
-    return clientNames;
-  }
 
   // startDate and endDate should be moment objects
   var _getEmployeeData = function(employeeId, startDate, endDate) {
@@ -215,8 +199,8 @@ function Viz () {
 
     $tooltip = $('.tooltip');
 
-    colors = _getClientColors();
-    clientNames = _getClientNames();
+    colors = Helpers.getClientColors();
+    clientNames = Helpers.getClientNames();
 
     stack = d3.layout.stack().offset("silhouette")
       .values(function (d) { return d.values; })

@@ -14,6 +14,9 @@ Template.body.helpers({
   },
   streamChartVisible: function () {
     return Session.get('streamChartVisible') || false;
+  },
+  treemapVisible: function () {
+    return Session.get('treemapVisible') || false;
   }
 });
 
@@ -37,5 +40,8 @@ Template.body.events({
     $('#employee-picture').val('');
     Session.set('employeeEditId', null);
     Session.set('employeeNewOpen', true);
+  },
+  "click .treemap-toggle": function (e) {
+    Session.set('treemapVisible', true);
   }
 });

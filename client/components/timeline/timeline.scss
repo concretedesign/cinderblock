@@ -56,6 +56,7 @@
 .work-bar {
   position: absolute;
   top: 9px;
+  border-radius: 2px;
   opacity: 0.8;
   @include transform(translateY(-50%));
 

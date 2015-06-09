@@ -18,11 +18,13 @@
       {{> employees}}
       <div class="button-container">
         <button class="employee-new-toggle">Add Employee</button>
+        <button class="treemap-toggle">Treemap</button>
       </div>
     </main>
     <div class="employee-new-container {{employeeNewState}}">
       {{> employee_new}}
     </div>
     {{#if streamChartVisible}}{{> stream_chart}}{{/if}}
+    {{#if treemapVisible}}{{> treemap}}{{/if}}
   </div>
 </body>
