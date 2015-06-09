@@ -34,10 +34,19 @@
     font-weight: 300;
   }
 
-  .label {
+  .chart-label {
     padding: 28px;
     font-size: 28px;
     font-weight: 300;
+    @include user-select(none);
+    cursor: pointer;
+  	cursor: move;
+  	cursor: col-resize;
+
+    .weeks {
+
+      /* border-bottom: 1px solid #fff; */
+    }
   }
 
   .close {

@@ -10,8 +10,16 @@ Template.stream_chart.helpers({
   },
   isCurrentStream: function () {
     return Session.equals('streamChartEmployeeId', this._id) ? 'current' : '';
+  },
+  chartLabelWeeks: function () {
+    return Session.get('chartLabelWeeks') || 4;
   }
 });
+
+var mousedown = false;
+var mousestart;
+var mousePos = 0;
+const THRESHOLD = 30;
 
 Template.stream_chart.events({
   "click .close": function (e) {
@@ -23,6 +31,35 @@ Template.stream_chart.events({
   'click .stream-employee': function (e) {
     Session.set('streamChartEmployeeId', this._id)
     streamViz.transition(this._id);
+  },
+  'mousedown .chart-label': function (e) {
+    mousedown = true;
+    mousestart = e.pageX;
+  },
+  'mouseup .chart-label': function (e) {
+    mousedown = false;
+    mousePos = 0;
+
+    streamViz.setDates(Session.get('chartLabelWeeks'));
+    streamViz.transition(Session.get('streamChartEmployeeId'));
+  },
+  'mousemove .chart-label': function (e) {
+    if(mousedown) {
+      var deltaX = e.pageX - mousestart;
+
+      if (mousePos < -20) {
+        // Subtract 1
+        mousePos = 0;
+        var updatedWeeks = Math.max((Session.get('chartLabelWeeks') - 1), 2);
+        Session.set('chartLabelWeeks', updatedWeeks);
+      } else if (mousePos > 20) {
+        mousePos = 0;
+        var updatedWeeks = Math.min((Session.get('chartLabelWeeks') + 1), 12);
+        Session.set('chartLabelWeeks', updatedWeeks);
+      } else {
+        mousePos = mousePos + deltaX;
+      }
+    }
   }
 });
 
@@ -31,6 +68,8 @@ Template.stream_chart.onRendered(function () {
 
   var employeeId = Session.get('streamChartEmployeeId') || Employees.findOne()._id;
   streamViz.transition(employeeId);
+
+  Session.set('chartLabelWeeks', 4);
 })
 
 function Viz () {
@@ -81,7 +120,9 @@ function Viz () {
           if (date.isBetween(startDate.startOf('day'), endDate.endOf('day'))) {
 
             var index = _.indexOf(_.pluck(clientDates[employeeClient.client_id], 'date'), date.format('MM/DD/YY'));
-            clientDates[employeeClient.client_id][index].hotness = work.hotness; // Add one because we've set 0 to 1 above
+            if (index >= 0) {
+              clientDates[employeeClient.client_id][index].hotness = work.hotness; // Add one because we've set 0 to 1 above
+            }
           }
         }
       });
@@ -90,9 +131,11 @@ function Viz () {
     return _.flatten(clientDates);
   }
 
-  var _setDates = function(x) {
-    // TODO
-    // x.domain([startDate.toDate(), endDate.toDate()]);
+  // Expects two moment objects
+  var _setDates = function(numWeeks) {
+    startDate = moment().startOf('week').startOf('day');
+    endDate = moment().startOf('week').add(numWeeks, 'weeks').subtract(2, 'day').endOf('day');
+    numDays = numWeeks * 7;
   }
 
   var _handleMouseOvers = function () {
@@ -117,8 +160,7 @@ function Viz () {
       $tooltip.html( "<p>" + clientNames[d.key] + " - " + date + "</p>" );
     })
     .on("mouseout", function(d, i) {
-      d3.select(this)
-        .classed("hover", false);
+      d3.select(this).classed("hover", false);
 
       $tooltip.html("");
     });
@@ -130,6 +172,8 @@ function Viz () {
       d.date = format.parse(d.date);
       d.hotness = +d.hotness;
     });
+
+    x.domain([startDate.toDate(), endDate.toDate()])
 
     layers = stack(nest.entries(data));
 
@@ -167,9 +211,7 @@ function Viz () {
   }
 
   var _init = function () {
-    numDays = 26;
-    startDate = moment().startOf('isoweek');
-    endDate = moment().startOf('isoweek').add(numDays, 'days');
+    _setDates(4);
 
     $tooltip = $('.tooltip');
 
@@ -196,7 +238,7 @@ function Viz () {
     format = d3.time.format("%m/%d/%y");
 
     x = d3.time.scale()
-      .domain([startDate.toDate(), endDate.subtract(1, 'days').toDate()])
+      .domain([startDate.toDate(), endDate.toDate()])
       .range([0, width]);
 
     y = d3.scale.linear()
@@ -213,6 +255,7 @@ function Viz () {
   _init();
 
   return {
-    transition: _transition
+    transition: _transition,
+    setDates: _setDates
   }
 }
