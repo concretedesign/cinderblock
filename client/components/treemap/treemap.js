@@ -15,16 +15,46 @@ const THRESHOLD = 30;
 Template.treemap.events({
   "click .close": function (e) {
     Session.set('treemapVisible', false);
+  },
+  'mousedown .chart-label': function (e) {
+    mousedown = true;
+    mousestart = e.pageX;
+  },
+  'mouseup .chart-label': function (e) {
+    mousedown = false;
+    mousePos = 0;
+
+    treemap.setDates(Session.get('treemapLabelWeeks'));
+    treemap.transition();
+  },
+  'mousemove .chart-label': function (e) {
+    if(mousedown) {
+      var deltaX = e.pageX - mousestart;
+
+      if (mousePos < -20) {
+        // Subtract 1
+        mousePos = 0;
+        var updatedWeeks = Math.max((Session.get('treemapLabelWeeks') - 1), 2);
+        Session.set('treemapLabelWeeks', updatedWeeks);
+      } else if (mousePos > 20) {
+        mousePos = 0;
+        var updatedWeeks = Math.min((Session.get('treemapLabelWeeks') + 1), 12);
+        Session.set('treemapLabelWeeks', updatedWeeks);
+      } else {
+        mousePos = mousePos + deltaX;
+      }
+    }
   }
 });
 
 Template.treemap.onRendered(function () {
+  Session.set('treemapLabelWeeks', 4);
   window.treemap = new Treemap();
 })
 
 function Treemap () {
   const TRANSITION_DURATION = 400;
-  var data, treemap, startDate, endDate, width, height, x, y, container, format, numDays, colors, datearray = [], $tooltip;
+  var data, node, treemap, startDate, endDate, width, height, x, y, container, format, numDays, colors, datearray = [], $tooltip, opacityScale;
 
   // startDate and endDate should be moment objects
   var _getEmployeeData = function(startDate, endDate) {
@@ -87,55 +117,50 @@ function Treemap () {
     });
   }
 
-  var _transition = function (employeeId) {
-    var data = _getEmployeeData(startDate, endDate);
-    data.forEach(function(d) {
-      d.date = format.parse(d.date);
-      d.hotness = +d.hotness;
-    });
-
-    x.domain([startDate.toDate(), endDate.toDate()])
-
-    layers = stack(nest.entries(data));
-
-    // Data join
-    var paths = svg.selectAll("path").data(layers)
-
-    // Update
-    paths
-      .transition().duration(TRANSITION_DURATION)
-      .attr("d", function (d) { return area(d.values); })
-      .style("fill", function (d) {
-        return colors[d.key];
-      });
-
-    // Enter
-    paths.enter()
-      .append("path")
-      .transition().duration(TRANSITION_DURATION)
-      .attr("d", function (d) { return area(d.values); })
-      .style("fill", function (d) {
-        return colors[d.key];
-      })
-
-    // Exit
-    paths.exit().transition().duration(TRANSITION_DURATION).remove();
-
-    _handleMouseOvers();
-
-    // Watch for data changes
-    Work.find().observeChanges({
-      changed: function(id, fields) {
-        _transition(employeeId)
-      }
-    });
-  }
-
   var _position = function() {
     this.style("left", function(d) { return d.x + "px"; })
         .style("top", function(d) { return d.y + "px"; })
         .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
         .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
+  }
+
+  var _transition = function () {
+    var data = _getEmployeeData(startDate, endDate);
+    console.log(data);
+
+    // node = container.datum(data).selectAll(".node")
+    //   .data(treemap.nodes)
+    // .enter().append("div")
+    //   .attr("class", "node")
+    //   .call(_position)
+    //   .style("background", function (d) { return d.color; })
+    //   .style("opacity", function (d) { return opacityScale(d.hotness); })
+    //   .html(function (d) { return d.picture ? '<img src="' + d.picture + '" />' : ''; });
+    //
+    //
+
+    // Data join
+    var nodes = container.datum(data).selectAll('.node').data(treemap.nodes)
+
+    // Enter
+    nodes.enter().append("div").attr("class", "node")
+      .style("background", function (d) { return d.color; })
+      .style("opacity", function (d) { return opacityScale(d.hotness); })
+      .html(function (d) { return d.picture ? '<img src="' + d.picture + '" />' : ''; });
+
+      // .html(function (d) { return d.picture ? '<img src="' + d.picture + '" />' : ''; });
+      // .style("background", function (d) { return d.color; })
+      // .style("opacity", function (d) { return opacityScale(d.hotness); })
+      // .transition().duration(TRANSITION_DURATION)
+      // .call(_position)
+
+    // Exit
+    nodes.exit().transition().duration(TRANSITION_DURATION).remove();
+
+    // Update
+    nodes.transition().duration(TRANSITION_DURATION)
+      .call(_position);
+
   }
 
   var _init = function () {
@@ -149,13 +174,13 @@ function Treemap () {
 
     treemap = d3.layout.treemap()
       .size([width, height])
-      .sticky(true)
+      .sticky(false)
       .value(function(d) { return d.numDays; });
 
     container = d3.select(".treemap-container");
 
-    var opacityScale = d3.scale.linear().domain([0, 10]).range([0.2, 0.9]);
-    var node = container.datum(data).selectAll(".node")
+    opacityScale = d3.scale.linear().domain([0, 10]).range([0.2, 0.9]);
+    node = container.datum(data).selectAll(".node")
       .data(treemap.nodes)
     .enter().append("div")
       .attr("class", "node")
