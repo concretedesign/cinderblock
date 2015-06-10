@@ -11,11 +11,6 @@ Template.profile.events({
     $('#employee-name').val(this.name);
     $('#employee-title').val(this.title);
     $('#employee-picture').val(this.picture);
-  },
-  "click .viz-toggle": function (e) {
-    e.stopPropagation();
-    Session.set('streamChartEmployeeId', this._id);
-    Session.set('streamChartVisible', true);
   }
 });
 

@@ -3,13 +3,14 @@ Template.stream_chart.helpers({
     return Session.get('streamChartVisible') || false;
   },
   employeeId: function () {
-    return Session.get('streamChartEmployeeId') || Employees.findOne()._id;
+    return Session.get('streamChartEmployeeIds') || [Employees.findOne()._id];
   },
   employees: function () {
     return Employees.find({});
   },
-  isCurrentStream: function () {
-    return Session.equals('streamChartEmployeeId', this._id) ? 'current' : '';
+  isActiveStream: function () {
+    var ids = Session.get('streamChartEmployeeIds') || [];
+    return ids.indexOf(this._id) >= 0 ? 'current' : '';
   },
   chartLabelWeeks: function () {
     return Session.get('chartLabelWeeks') || 4;
@@ -25,12 +26,18 @@ Template.stream_chart.events({
   "click .close": function (e) {
     Session.set('streamChartVisible', false);
   },
-  "click .profile": function (e) {
-    Session.set('streamChartEmployeeId', this._id);
-  },
   'click .stream-employee': function (e) {
-    Session.set('streamChartEmployeeId', this._id)
-    streamViz.transition(this._id);
+    var employeeIds = Session.get('streamChartEmployeeIds');
+
+    var index = employeeIds.indexOf(this._id);
+    if (index >= 0) {
+      employeeIds.splice(index, 1);
+    } else {
+      employeeIds.push(this._id);
+    }
+
+    Session.set('streamChartEmployeeIds', employeeIds)
+    streamViz.transition(employeeIds);
   },
   'mousedown .chart-label': function (e) {
     mousedown = true;
@@ -41,7 +48,7 @@ Template.stream_chart.events({
     mousePos = 0;
 
     streamViz.setDates(Session.get('chartLabelWeeks'));
-    streamViz.transition(Session.get('streamChartEmployeeId'));
+    streamViz.transition(Session.get('streamChartEmployeeIds'));
   },
   'mousemove .chart-label': function (e) {
     if(mousedown) {
@@ -66,8 +73,8 @@ Template.stream_chart.events({
 Template.stream_chart.onRendered(function () {
   window.streamViz = new Viz();
 
-  var employeeId = Session.get('streamChartEmployeeId') || Employees.findOne()._id;
-  streamViz.transition(employeeId);
+  var employeeIds = Session.get('streamChartEmployeeIds') || [Employees.findOne()._id];
+  streamViz.transition(employeeIds);
 
   Session.set('chartLabelWeeks', 4);
 })
@@ -78,7 +85,7 @@ function Viz () {
     area, svg, format, numDays, colors, clientNames, datearray = [], $tooltip;
 
   // startDate and endDate should be moment objects
-  var _getEmployeeData = function(employeeId, startDate, endDate) {
+  var _getEmployeeData = function(employeeIds, startDate, endDate) {
     // Create baseline data
     var clientDates = {};
     Clients.find().forEach(function (client) {
@@ -88,31 +95,47 @@ function Viz () {
         clientDates[client._id].push({
           clientId: client._id,
           hotness: .1,
-          date: date.format('MM/DD/YY')
+          date: date.format('MM/DD/YY'),
+          numEmployees: 0,
         })
       }
     });
 
-    EmployeeClients.find({ employee_id: employeeId}).forEach(function (employeeClient) {
-      employeeClient.work.forEach(function (workId) {
-        var work = Work.findOne(workId);
+    employeeIds.forEach(function (employeeId) {
+      EmployeeClients.find({ employee_id: employeeId}).forEach(function (employeeClient) {
+        employeeClient.work.forEach(function (workId) {
+          var work = Work.findOne(workId);
 
-        // split work into day units
-        var days = Math.abs(moment(work.start).diff(moment(work.end), 'days'));
-        for (var i = 0; i < days; i++) {
-          var date = moment(work.start).add(i, 'days');
-          if (date.isBetween(startDate.startOf('day'), endDate.endOf('day'))) {
+          // split work into day units
+          var days = Math.abs(moment(work.start).diff(moment(work.end), 'days'));
+          for (var i = 0; i < days; i++) {
+            var date = moment(work.start).add(i, 'days');
+            if (date.isBetween(startDate.startOf('day'), endDate.endOf('day'))) {
 
-            var index = _.indexOf(_.pluck(clientDates[employeeClient.client_id], 'date'), date.format('MM/DD/YY'));
-            if (index >= 0) {
-              clientDates[employeeClient.client_id][index].hotness = work.hotness; // Add one because we've set 0 to 1 above
+              var index = _.indexOf(_.pluck(clientDates[employeeClient.client_id], 'date'), date.format('MM/DD/YY'));
+              if (index >= 0) {
+                var entry = clientDates[employeeClient.client_id][index];
+                if (entry.hotness == .1) {
+                  entry.hotness = 0;
+                }
+                entry.hotness += work.hotness;
+                entry.numEmployees += 1;
+              }
             }
           }
-        }
+        });
       });
     });
 
-    return _.flatten(clientDates);
+    // Average out values
+    var flattenedDates = _.flatten(clientDates);
+    flattenedDates.forEach(function (date, index) {
+      if (date.numEmployees > 1) {
+        flattenedDates[index].hotness = flattenedDates[index].hotness / date.numEmployees;
+      }
+    })
+
+    return flattenedDates;
   }
 
   // Expects two moment objects
@@ -150,8 +173,8 @@ function Viz () {
     });
   }
 
-  var _transition = function (employeeId) {
-    var data = _getEmployeeData(employeeId, startDate, endDate);
+  var _transition = function (employeeIds) {
+    var data = _getEmployeeData(employeeIds, startDate, endDate);
     data.forEach(function(d) {
       d.date = format.parse(d.date);
       d.hotness = +d.hotness;
@@ -189,7 +212,7 @@ function Viz () {
     // Watch for data changes
     Work.find().observeChanges({
       changed: function(id, fields) {
-        _transition(employeeId)
+        _transition(employeeIds)
       }
     });
   }

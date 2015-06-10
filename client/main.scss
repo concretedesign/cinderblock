@@ -72,11 +72,18 @@ main {
 .employee-new-toggle {
   position: fixed;
   top: 10px;
-  right: 96px;
+  right: 180px;
   font-size: rem(12);
 }
 
 .treemap-toggle {
+  position: fixed;
+  top: 10px;
+  right: 90px;
+  font-size: rem(12);
+}
+
+.stream-toggle {
   position: fixed;
   top: 10px;
   right: 10px;

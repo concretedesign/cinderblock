@@ -43,5 +43,9 @@ Template.body.events({
   },
   "click .treemap-toggle": function (e) {
     Session.set('treemapVisible', true);
+  },
+  "click .stream-toggle": function (e) {
+    Session.set('streamChartEmployeeIds', [Employees.findOne()._id]);
+    Session.set('streamChartVisible', true);
   }
 });
