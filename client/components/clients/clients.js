@@ -1,7 +1,7 @@
 
 Template.clients.helpers({
   clients: function () {
-    return Clients.find({});
+    return Clients.find({}, {sort: {name: 1}});
   }
 });
 
@@ -19,6 +19,7 @@ Template.clients.onRendered(function () {
       window.draggingClient = false;
       window.clientThumb = event.target.cloneNode(true);
       window.clientThumb.classList.add('dragging');
+      document.getElementsByClassName('container')[0].classList.add('client-dragging');
 
       window.clientThumb.style.left = event.target.offsetLeft + 'px';
       window.clientThumb.style.top = event.target.offsetTop + 'px';
@@ -50,6 +51,7 @@ Template.clients.onRendered(function () {
 
     onend: function (event) {
       window.draggingClient = false;
+      document.getElementsByClassName('container')[0].classList.remove('client-dragging');
       document.body.removeChild(window.clientThumb);
     }
   });

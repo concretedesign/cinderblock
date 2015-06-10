@@ -13,7 +13,8 @@ var clientSchema = new SimpleSchema({
   },
   hidden: {
     type: Boolean,
-    label: "Hidden"
+    label: "Hidden",
+    optional: true
   }
 });
 

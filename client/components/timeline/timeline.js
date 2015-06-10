@@ -85,7 +85,8 @@ Template.timeline.onRendered(function () {
     if (event.type == 'resizemove' || event.type == 'resizeend') {
       return moment(new Date(event.target.dataset.start));
     } else {
-      var x = event.pageX - offset;
+      var scrollLeft = document.getElementsByClassName('timeline-container')[0].scrollLeft;
+      var x = event.pageX + scrollLeft - offset;
 
       // Calculate date based on position
       var daysFromStart = Math.round(x / Helpers.constants.dayWidth);
@@ -130,7 +131,8 @@ Template.timeline.onRendered(function () {
         restriction: '.client-bar',
       },
       onmove: function (event) {
-        var x = event.pageX - offset - (Session.get('clientPanelOpen') ? 240 : 0);
+        var scrollLeft = document.getElementsByClassName('timeline-container')[0].scrollLeft;
+        var x = event.pageX + scrollLeft - offset - (Session.get('clientPanelOpen') ? 240 : 0);
         event.target.style.left = (Session.get('clientPanelOpen') ? (x - 240) : x) + 'px';
 
         setLabel(event);

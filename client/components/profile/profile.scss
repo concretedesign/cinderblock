@@ -9,6 +9,7 @@
   display: block;
   width: 100%;
   min-height: 150px;
+  @include transition(opacity 400ms ease-in);
 
   h1 {
     font-size: rem(16);
@@ -28,8 +29,12 @@
     border-radius: 50%;
     border: 2px solid #e1e1e1;
   }
+}
+
+.client-dragging .profile {
+  opacity: 0.4;
 
   &.drop-target {
-    background: #e1e1e1;
+    opacity: 1;
   }
 }
