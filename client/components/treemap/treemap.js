@@ -126,18 +126,6 @@ function Treemap () {
 
   var _transition = function () {
     var data = _getEmployeeData(startDate, endDate);
-    console.log(data);
-
-    // node = container.datum(data).selectAll(".node")
-    //   .data(treemap.nodes)
-    // .enter().append("div")
-    //   .attr("class", "node")
-    //   .call(_position)
-    //   .style("background", function (d) { return d.color; })
-    //   .style("opacity", function (d) { return opacityScale(d.hotness); })
-    //   .html(function (d) { return d.picture ? '<img src="' + d.picture + '" />' : ''; });
-    //
-    //
 
     // Data join
     var nodes = container.datum(data).selectAll('.node').data(treemap.nodes)
@@ -147,12 +135,6 @@ function Treemap () {
       .style("background", function (d) { return d.color; })
       .style("opacity", function (d) { return opacityScale(d.hotness); })
       .html(function (d) { return d.picture ? '<img src="' + d.picture + '" />' : ''; });
-
-      // .html(function (d) { return d.picture ? '<img src="' + d.picture + '" />' : ''; });
-      // .style("background", function (d) { return d.color; })
-      // .style("opacity", function (d) { return opacityScale(d.hotness); })
-      // .transition().duration(TRANSITION_DURATION)
-      // .call(_position)
 
     // Exit
     nodes.exit().transition().duration(TRANSITION_DURATION).remove();
