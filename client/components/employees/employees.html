@@ -1,27 +1,37 @@
 <template name="employees">
-  <div class="employees">
-
-    <div class="profile-container">
-      {{#each employees}}
-        {{> profile}}
-      {{/each}}
-    </div>
-    <div class="timeline-container">
-      <div class="global-timeline-container">
-        <div class="global-timeline" style="width: {{barWidth}};">
-          <ul>
-            {{#each loopCount 365}}
-              <li>
-                {{#if displayDate}}<span class="big-date">{{displayDate}}</span>{{/if}}
-                {{#if weekend}}<span class="weekend"></span>{{/if}}
-              </li>
-            {{/each}}
-          </ul>
-        </div>
-      </div>
-      {{#each employees}}
-        {{> timeline}}
-      {{/each}}
-    </div>
+  <div class="employees-container">
+    <table class="employees">
+      <tbody>
+        <tr class="employee">
+          <td class="profile-column"></td>
+          <td class="timeline-column">
+            <div class="timeline-container">
+              <div class="global-timeline-container">
+                <div class="global-timeline" style="width: {{barWidth}};">
+                  <ul>
+                    {{#each loopCount 365}}
+                      <li>
+                        {{#if displayDate}}<span class="big-date">{{displayDate}}</span>{{/if}}
+                        {{#if weekend}}<span class="weekend"></span>{{/if}}
+                      </li>
+                    {{/each}}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {{#each employees}}
+          <tr class="employee">
+            <td class="profile-column">
+              {{> profile}}
+            </td>
+            <td class="timeline-column">
+              {{> timeline}}
+            </td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
   </div>
 </template>

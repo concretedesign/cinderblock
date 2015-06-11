@@ -1,13 +1,14 @@
 @import "bourbon/bourbon";
 @import "neat/neat";
 
+@import "../../styles/variables";
+
 .profile {
-  text-align: center;
   cursor: pointer;
   padding: 0 10px;
   float: left;
-  display: block;
-  width: 100%;
+  display: inline-block;
+  width: $employee-panel-width;
   min-height: 115px;
   margin-bottom: 35px;
   @include transition(opacity 400ms ease-in);
@@ -27,6 +28,8 @@
   }
   img {
     height: 40px;
+    float: left;
+    margin: 4px 12px 0 0;
     border-radius: 50%;
     border: 2px solid #e1e1e1;
   }

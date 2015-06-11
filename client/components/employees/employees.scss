@@ -4,6 +4,18 @@
 @import "../../styles/variables";
 
 .employees {
+  overflow-x: scroll;
+}
+.profile-column {
+  position: absolute;
+  height: 20%;
+  z-index: 1;
+  width: $employee-panel-width;
+  background-color: $background-color;
+}
+.timeline-column {
+  padding: 0 0 20px $employee-panel-width;
+  width: 100%;
 }
 
 .profile-container {
@@ -19,56 +31,4 @@
 }
 .open .profile-container {
   left: $client-panel-width;
-}
-
-.timeline-container {
-  margin-left: $employee-panel-width;
-  position: fixed;
-  overflow: scroll;
-  height: 100%;
-  width: 100%;
-  padding-top: 40px;
-}
-.global-timeline-container {
-  position: absolute;
-}
-.global-timeline {
-  top: -20px;
-  margin: 0 0 24px 0;
-  position: relative;
-
-  .big-date {
-    left: 4px;
-    font-size: 12px;
-    color: #fff;
-    position: absolute;
-    top: -13px;
-    height: 10px;
-    width: 40px;
-    display: block;
-  }
-  ul {
-    font-size: 0;
-    white-space: nowrap;
-  }
-  li {
-    display: inline-block;
-    position: relative;
-    width: 40px;
-    height:5px;
-    border-right: 1px solid #fff;
-    border-bottom: 1px solid #fff;
-
-    &:first-child {
-      border-left: 1px solid #fff;
-    }
-
-    .weekend {
-      background-color: #d9d9d9;
-      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAO0lEQVQYV2NkIAIwElKzZNYSH7yKQApi0mK2EDQJZBNWRTATYE7BUISuAKdJ6J6Bm4TNBBTr8CkAKQQAuIcWOFz8bckAAAAASUVORK5CYII=) repeat;
-      opacity: 1;
-      position: absolute;
-      width: 100%;
-    }
-  }
 }

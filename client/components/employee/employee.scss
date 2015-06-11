@@ -1,8 +1,12 @@
 @import "bourbon/bourbon";
 @import "neat/neat";
 
+.employees-container {
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: visible;
+}
+
 .employee {
-  margin-bottom: 20px;
-  @include outer-container;
-  max-width: 12000px;
+
 }

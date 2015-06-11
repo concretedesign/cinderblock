@@ -1,6 +1,8 @@
 @import "bourbon/bourbon";
 @import "neat/neat";
 
+@import "../../styles/variables";
+
 .timeline {
   margin-bottom: 35px;
   min-height: 115px;
@@ -78,5 +80,51 @@
 
   &:hover span {
     opacity: 1;
+  }
+}
+
+.timeline-container {
+  padding-top: 40px;
+}
+.global-timeline-container {
+}
+.global-timeline {
+  top: -20px;
+  margin: 0 0 24px 0;
+  position: relative;
+
+  .big-date {
+    left: 4px;
+    font-size: 12px;
+    color: $global-timeline-color;
+    position: absolute;
+    top: -13px;
+    height: 10px;
+    width: 40px;
+    display: block;
+  }
+  ul {
+    font-size: 0;
+    white-space: nowrap;
+  }
+  li {
+    display: inline-block;
+    position: relative;
+    width: 40px;
+    height:5px;
+    border-right: 1px solid $global-timeline-color;
+    border-bottom: 1px solid $global-timeline-color;
+
+    &:first-child {
+      border-left: 1px solid $global-timeline-color;
+    }
+
+    .weekend {
+      background-color: #d9d9d9;
+      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAO0lEQVQYV2NkIAIwElKzZNYSH7yKQApi0mK2EDQJZBNWRTATYE7BUISuAKdJ6J6Bm4TNBBTr8CkAKQQAuIcWOFz8bckAAAAASUVORK5CYII=) repeat;
+      opacity: 1;
+      position: absolute;
+      width: 100%;
+    }
   }
 }
