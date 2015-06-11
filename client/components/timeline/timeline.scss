@@ -42,7 +42,13 @@
   -o-user-select: none;
   user-select: none;
 
-  &:hover + h3 {
+  h3 {
+    position: fixed;
+    opacity: 0;
+    @include transition(opacity 200ms ease-in);
+  }
+
+  &:hover h3 {
     opacity: 1;
   }
 }

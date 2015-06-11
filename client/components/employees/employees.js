@@ -1,6 +1,6 @@
 Template.employees.helpers({
   employees: function () {
-    return Employees.find({});
+    return Employees.find({}, {sort: {name: 1}});
   },
   barWidth: function () {
     var dateDiff = Session.get('dateDiff') || Helpers.constants.defaultDays;
